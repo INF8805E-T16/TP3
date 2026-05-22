@@ -51,7 +51,7 @@ def summarize_yearly_counts(dataframe):
             trees for each neighborhood each year.
     '''
     # TODO : Summarize df
-    dataframe = dataframe.groupby(['Arrond_Nom', pd.Grouper(key="Date_Plantation", freq="YE")]).size().reset_index(name="Counts")
+    dataframe = dataframe.groupby(['Arrond_Nom', pd.Grouper(key='Date_Plantation', freq='YE')]).size().reset_index(name='Counts')
     
     return dataframe
 
@@ -97,7 +97,8 @@ def get_daily_info(dataframe, arrond, year):
     '''
     # TODO : Get daily tree count data and return
     year_int = pd.to_datetime(year).year
-    data = dataframe[(dataframe["Arrond_Nom"] == arrond) & (dataframe['Date_Plantation'].dt.year == year_int)]
-    data = data.groupby(['Date_Plantation']).size().reset_index(name="Counts")
+    data = dataframe[(dataframe['Arrond_Nom'] == arrond) & (dataframe['Date_Plantation'].dt.year == year_int)]
+    data = data.set_index('Date_Plantation')
+    data = data.resample('D').size().fillna(0).astype(int).reset_index(name='Counts')
 
     return data
