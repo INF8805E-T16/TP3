@@ -15,7 +15,7 @@ def convert_dates(dataframe):
     '''
     # TODO : Convert dates
     dataframe['Date_Plantation'] = pd.to_datetime(dataframe['Date_Plantation'])
-    # print(dataframe.dtypes)
+
     return dataframe
 
 
@@ -51,7 +51,6 @@ def summarize_yearly_counts(dataframe):
             trees for each neighborhood each year.
     '''
     # TODO : Summarize df
-    dataframe["Year"] = dataframe["Date_Plantation"].dt.year
     dataframe = dataframe.groupby(['Arrond_Nom', pd.Grouper(key="Date_Plantation", freq="YE")]).size().reset_index(name="Counts")
     
     return dataframe
@@ -97,6 +96,8 @@ def get_daily_info(dataframe, arrond, year):
             neighborhood and year.
     '''
     # TODO : Get daily tree count data and return
-    data = dataframe[(dataframe["Arrond_Nom"] == arrond) & (dataframe['Date_Plantation'] == year)]
-    
+    year_int = pd.to_datetime(year).year
+    data = dataframe[(dataframe["Arrond_Nom"] == arrond) & (dataframe['Date_Plantation'].dt.year == year_int)]
+    data = data.groupby(['Date_Plantation']).size().reset_index(name="Counts")
+
     return data
