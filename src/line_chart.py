@@ -92,6 +92,7 @@ def get_figure(line_data, arrond, year):
 
     fig.update_traces(
         mode=mode,
+        line=dict(color=THEME['dark_color']),
         hovertemplate=hover_template.get_linechart_hover_template()
     )
     
